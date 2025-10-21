@@ -10,38 +10,41 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Monasterio {
 
-    private Lock[] tenedores;
+    private boolean[] tenedores;
 
     public Monasterio(int numMonjes){
-        tenedores = new Lock[numMonjes];
-        for(int i=0; i<numMonjes; i++){
-            tenedores[i] = new ReentrantLock();
-        }
+        tenedores = new boolean[numMonjes];
+
     }
 
-    public boolean intentaComer(int idMonje){
+    public synchronized void intentaComer(int idMonje) throws InterruptedException{
         int izq = idMonje;
         int der = (idMonje+1)%tenedores.length;
-        if(tenedores[izq].tryLock()){
-            try{
-                if(tenedores[der].tryLock()){
-                    return true;
-                }
-            }finally{
-                tenedores[izq].unlock();
-            }
+
+        while(tenedores[izq] || tenedores[der]){
+            wait();
         }
-        return false;
+
+        tenedores[izq] = true;
+        tenedores[der] = true;
+        notifyAll();
+
+
     }
 
-    public void soltarTenedor(int idMonje){
+    public synchronized void soltarTenedor(int idMonje) throws InterruptedException{
 
         int izq = idMonje;
         int der = (idMonje+1)%tenedores.length;
-        tenedores[izq].unlock();
-        tenedores[der].unlock();
+
+        tenedores[izq] = false;
+        tenedores[der] = false;
+        notifyAll();
+        System.out.println("El monje "+idMonje+" ha soltado el tenedor");
 
     }
+
+
 
 
 }

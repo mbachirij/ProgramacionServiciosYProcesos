@@ -11,12 +11,13 @@ public class Monje extends Thread{
     }
 
     private void rezar() throws InterruptedException{
-        System.out.println("El monje "+id+" está rezando...");
+        System.out.println("El monje "+id+" reza");
         Thread.sleep(1500);
+        System.out.println("El monje "+id+" ha terminado de rezar.");
     }
 
     private void comer() throws InterruptedException{
-        System.out.println("El monje "+id+" está comiendo...");
+        System.out.println("El monje "+id+" come");
         Thread.sleep(1500);
         System.out.println("El monje "+id+" ha terminado de comer.");
     }
@@ -28,10 +29,10 @@ public class Monje extends Thread{
             while(true){
                 rezar();
 
-                if(monasterio.intentaComer(id)){
-                    comer();
-                    monasterio.soltarTenedor(id);
-                }
+                monasterio.intentaComer(id);
+                comer();
+                monasterio.soltarTenedor(id);
+
 
                 Thread.sleep(1500);
 
