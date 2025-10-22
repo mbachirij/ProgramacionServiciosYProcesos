@@ -1,4 +1,4 @@
-package ThreadPool;
+package MultiHilos.ThreadPool;
 
 public class Hilo implements Runnable {
 

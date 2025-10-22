@@ -1,4 +1,4 @@
-package Pistola;
+package MultiHilos.Pistola;
 
 public class Main {
 

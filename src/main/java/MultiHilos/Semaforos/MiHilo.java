@@ -1,4 +1,4 @@
-package Semaforos;
+package MultiHilos.Semaforos;
 
 import java.util.concurrent.Semaphore;
 

@@ -1,4 +1,4 @@
-package Pistola;
+package MultiHilos.Pistola;
 
 public class Pistola {
     private int balas=40;
@@ -34,7 +34,7 @@ public class Pistola {
 
     //Método para recargar las balas
     public synchronized void recargar(){
-        System.out.println("Pistola recargada");
+        System.out.println("MultiHilos.Pistola recargada");
         balas = balas+40;
         notify();
 

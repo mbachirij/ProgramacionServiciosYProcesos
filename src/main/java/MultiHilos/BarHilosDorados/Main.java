@@ -1,4 +1,4 @@
-package BarHilosDorados;
+package MultiHilos.BarHilosDorados;
 
 public class Main {
 

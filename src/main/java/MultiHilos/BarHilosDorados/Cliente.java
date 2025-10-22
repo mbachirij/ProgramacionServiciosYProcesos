@@ -1,4 +1,4 @@
-package BarHilosDorados;
+package MultiHilos.BarHilosDorados;
 
 //En el bar “Los Hilos Dorados” hay 3 camareros.
 //Cada uno puede atender a un cliente a la vez.

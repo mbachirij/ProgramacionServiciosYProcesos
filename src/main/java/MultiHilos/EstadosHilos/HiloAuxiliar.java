@@ -1,4 +1,4 @@
-package EstadosHilos;
+package MultiHilos.EstadosHilos;
 
 public class HiloAuxiliar extends Thread{
 
