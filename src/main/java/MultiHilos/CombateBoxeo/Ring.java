@@ -1,5 +1,6 @@
 package MultiHilos.CombateBoxeo;
 
+<<<<<<< HEAD
 /*
  * La clase Ring es el recurso compartido
  */
@@ -36,4 +37,7 @@ public class Ring {
 
 
 
+=======
+public class Ring {
+>>>>>>> c272e62da602382d5d9488bbfd658a01b3e12941
 }

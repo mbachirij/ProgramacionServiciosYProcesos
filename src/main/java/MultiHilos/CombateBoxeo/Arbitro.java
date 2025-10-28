@@ -1,5 +1,6 @@
 package MultiHilos.CombateBoxeo;
 
+<<<<<<< HEAD
 public class Arbitro extends Thread{
 
     private Ring ring;
@@ -39,4 +40,7 @@ public class Arbitro extends Thread{
         }
     }
 
+=======
+public class Arbitro {
+>>>>>>> c272e62da602382d5d9488bbfd658a01b3e12941
 }

@@ -1,5 +1,6 @@
 package MultiHilos.CombateBoxeo;
 
+<<<<<<< HEAD
 /*
  * La clase Boxeador son los hilos
  */
@@ -53,4 +54,7 @@ public class Boxeador extends Thread{
         }
     }
 
+=======
+public class Boxeador {
+>>>>>>> c272e62da602382d5d9488bbfd658a01b3e12941
 }
