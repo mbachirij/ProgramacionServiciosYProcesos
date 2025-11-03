@@ -1,17 +1,14 @@
 package MultiHilos.CombateBoxeo;
 
-<<<<<<< HEAD
-/*
- * La clase Boxeador son los hilos
- */
-public class Boxeador extends Thread{
+
+public class Boxeador extends Thread {
 
     private String nombre;
     private Ring ring;
     private Boxeador boxeador;
     private int vida = 100;
 
-    public Boxeador(String nombre, Ring ring){
+    public Boxeador(String nombre, Ring ring) {
         this.nombre = nombre;
         this.ring = ring;
     }
@@ -28,33 +25,30 @@ public class Boxeador extends Thread{
         return vida;
     }
 
-    public void recibirDanio(){
-        int danio = (int)(Math.random()*10);
+    public void recibirDanio() {
+        int danio = (int) (Math.random() * 10);
         vida -= danio;
-        if(vida<0){
-            vida=0;
+        if (vida < 0) {
+            vida = 0;
         }
         System.out.println(danio);
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
             ring.esperarIniciarCombate();
 
-            while(!ring.haTerminadoCombate() && vida>0 && boxeador.getVida()>0){
+            while (!ring.haTerminadoCombate() && vida > 0 && boxeador.getVida() > 0) {
 
                 boxeador.recibirDanio();
-                System.out.println(nombre+" ha recibido un golpe le quedan "+vida+" puntos de vida - A "+boxeador.getNombre()+" le quedan "+boxeador.getVida()+" puntos de vida");
+                System.out.println(nombre + " ha recibido un golpe le quedan " + vida + " puntos de vida - A " + boxeador.getNombre() + " le quedan " + boxeador.getVida() + " puntos de vida");
                 Thread.sleep(2000);
             }
 
-        } catch(InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-=======
-public class Boxeador {
->>>>>>> c272e62da602382d5d9488bbfd658a01b3e12941
 }

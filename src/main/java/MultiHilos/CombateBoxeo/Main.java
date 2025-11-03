@@ -1,9 +1,9 @@
 package MultiHilos.CombateBoxeo;
 
 public class Main {
-<<<<<<< HEAD
 
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
 
         Ring ring = new Ring();
 
@@ -20,6 +20,4 @@ public class Main {
         arbitro.start();
     }
 
-=======
->>>>>>> c272e62da602382d5d9488bbfd658a01b3e12941
 }
