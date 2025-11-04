@@ -16,6 +16,7 @@ public class Cliente extends Thread {
         DataOutputStream out;
 
         try {
+
             socket = new Socket(HOST, PORT);
             out = new DataOutputStream(socket.getOutputStream());
             in = new DataInputStream(socket.getInputStream());
@@ -24,6 +25,7 @@ public class Cliente extends Thread {
             String mensaje = in.readUTF();
             System.out.println(mensaje);
             socket.close();
+
         }catch(UnknownHostException uhe){
             uhe.printStackTrace();
         } catch(IOException ioe){
