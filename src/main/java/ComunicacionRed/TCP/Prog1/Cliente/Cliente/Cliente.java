@@ -1,4 +1,4 @@
-package ComunicacionRed.TCP.Cliente;
+package ComunicacionRed.TCP.Prog1.Cliente.Cliente;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -1,4 +1,4 @@
-package ComunicacionRed.TCP.Server;
+package ComunicacionRed.TCP.Prog1.Cliente.Server;
 
 import java.io.*;
 import java.net.ServerSocket;
