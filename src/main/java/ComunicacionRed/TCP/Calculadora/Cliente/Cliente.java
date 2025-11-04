@@ -3,6 +3,7 @@ package ComunicacionRed.TCP.Calculadora.Cliente;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 public class Cliente {
     public static void main(String[] args) {
@@ -40,4 +41,16 @@ public class Cliente {
             e.printStackTrace();
         }
     }
+
+    public static String operacion(String a){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("¿QUÉ OPERACIÓN VA A REALIZAR EL CLIENTE?");
+        System.out.println("1. SUMA");
+        System.out.println("2. RESTA");
+        System.out.println("3. MULTIPLICACIÓN");
+        System.out.println("4. DIVISION");
+        String opcion = sc.nextLine().trim();
+        return opcion;
+    }
+
 }
