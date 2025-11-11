@@ -20,7 +20,7 @@ public class Hilo extends Thread{
             DataInputStream entrada = new DataInputStream(socket.getInputStream());
             DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
 
-            String
+
 
         } catch (Exception e) {
             e.printStackTrace();

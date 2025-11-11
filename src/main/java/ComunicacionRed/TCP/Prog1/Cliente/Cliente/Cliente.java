@@ -24,6 +24,7 @@ public class Cliente extends Thread {
             out.writeUTF("Hola desde el cliente");
             String mensaje = in.readUTF();
             System.out.println(mensaje);
+
             socket.close();
 
         }catch(UnknownHostException uhe){
