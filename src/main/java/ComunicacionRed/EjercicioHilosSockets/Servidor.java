@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Servidor {
-    public static List<String> clientesConectados = new ArrayList<>();
+    public static List<String> tareasRegistradas = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -20,8 +20,7 @@ public class Servidor {
                 Socket socket = servidor.accept();
                 System.out.println("Cliente conectado desde "+socket.getInetAddress());
 
-                Hilo hilo = new Hilo(socket);
-                hilo.start();
+
             }
         } catch (Exception e) {
             e.printStackTrace();

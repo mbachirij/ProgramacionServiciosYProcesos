@@ -4,94 +4,87 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class PokeAPI {
+
     public static void main(String[] args) {
 
-        // Crear un objeto Scanner para leer datos desde la consola
         Scanner sc = new Scanner(System.in);
-
-        // 1. Solicitar un Pokémon por consola
-        System.out.print("Introduce el nombre de un Pokémon: ");
-        String pokemon = sc.nextLine().toLowerCase(); // Convertir el nombre a minúsculas para evitar errores
-
-        // 2. Construir la URL para hacer la solicitud a la API
-        String url = "https://pokeapi.co/api/v2/pokemon/" + pokemon;
-
-        // Crear un cliente HTTP
-        HttpClient client = HttpClient.newHttpClient();
-
-        // Crear la solicitud HTTP GET
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET() // Método GET
-                .header("Accept", "application/json") // Especificar que esperamos una respuesta JSON
-                .build();
+        System.out.print("Introduce el nombre del Pokémon: ");
+        String pokemon = sc.nextLine().trim().toLowerCase();
 
         try {
-            // 3. Enviar la solicitud y recibir la respuesta
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String url = "https://pokeapi.co/api/v2/pokemon/" + pokemon;
 
-            // 4. Verificar si la respuesta fue exitosa (código de estado 200)
-            if (response.statusCode() == 200) {
-                String json = response.body(); // Obtener el cuerpo de la respuesta en formato JSON
+            HttpClient client = HttpClient.newHttpClient();
 
-                // 5. Extraer y mostrar los datos relevantes
-                String nombre = extractJsonValue(json, "\"name\":");
-                String id = extractJsonValue(json, "\"id\":");
-                String altura = extractJsonValue(json, "\"height\":");
-                String peso = extractJsonValue(json, "\"weight\":");
-                String tipos = extractJsonTypes(json);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create(url))
+                    .header("User-Agent", "Mozilla/5.0")
+                    .header("Accept", "application/json")
+                    .build();
 
-                // Mostrar la información del Pokémon
-                System.out.println("=== Información del Pokémon ===");
-                System.out.println("Nombre: " + nombre);
-                System.out.println("ID: " + id);
-                System.out.println("Altura: " + altura);
-                System.out.println("Peso: " + peso);
-                System.out.println("Tipos: " + tipos);
-            } else {
-                // Si la respuesta no es 200, mostrar un mensaje de error
-                System.out.println("Error: No se pudo obtener la información del Pokémon. Código de respuesta: " + response.statusCode());
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+            if (response.statusCode() != 200) {
+                System.err.println("Error HTTP: " + response.statusCode());
+                return;
             }
+
+            String json = response.body();
+
+            // ---------------------------------------------------
+            // 1. GUARDAR EL JSON EN UN FICHERO
+            // ---------------------------------------------------
+
+            String ruta = "pokemon_" + pokemon + ".json";
+            Files.writeString(Path.of(ruta), json, StandardCharsets.UTF_8);
+
+            System.out.println("\nArchivo guardado correctamente en: " + ruta);
+
+            // ---------------------------------------------------
+            // 2. MOSTRAR SOLO DATOS IMPORTANTES
+            // ---------------------------------------------------
+
+            String nombre = extraer(json, "\"name\":\"", "\"");
+            String id = extraer(json, "\"id\":", ",");
+            String height = extraer(json, "\"height\":", ",");
+            String weight = extraer(json, "\"weight\":", ",");
+
+            List<String> tipos = new ArrayList<>();
+            String[] partes = json.split("\"type\":\\{\"name\":\"");
+            for (int i = 1; i < partes.length; i++) {
+                tipos.add(partes[i].split("\"")[0]);
+            }
+
+            System.out.println("\n=== Información del Pokémon ===");
+            System.out.println("Nombre: " + nombre);
+            System.out.println("ID: " + id);
+            System.out.println("Altura: " + height);
+            System.out.println("Peso: " + weight);
+            System.out.println("Tipos: " + String.join(", ", tipos));
 
         } catch (Exception e) {
-            // Manejo de excepciones
-            System.out.println("Ocurrió un error al realizar la solicitud: " + e.getMessage());
-        } finally {
-            // Cerrar el Scanner para evitar fugas de recursos
-            sc.close();
+            e.printStackTrace();
         }
     }
 
-    // Método para extraer el valor de un campo específico del JSON
-    private static String extractJsonValue(String json, String key) {
-        int startIndex = json.indexOf(key) + key.length() + 2; // El +2 es para saltar las comillas
-        int endIndex = json.indexOf(",", startIndex);
-        if (endIndex == -1) { // En caso de que sea el último valor
-            endIndex = json.indexOf("}", startIndex);
+    // Método auxiliar para extraer valores simples del JSON
+    private static String extraer(String json, String inicio, String fin) {
+        try {
+            int p1 = json.indexOf(inicio) + inicio.length();
+            int p2 = json.indexOf(fin, p1);
+            return json.substring(p1, p2);
+        } catch (Exception e) {
+            return "No disponible";
         }
-        return json.substring(startIndex, endIndex).replace("\"", ""); // Eliminar las comillas alrededor del valor
-    }
-
-    // Método para extraer los tipos del Pokémon del JSON
-    private static String extractJsonTypes(String json) {
-        int startIndex = json.indexOf("\"types\":") + "\"types\":".length();
-        int endIndex = json.indexOf("]", startIndex);
-        String typesJson = json.substring(startIndex, endIndex).trim();
-
-        StringBuilder types = new StringBuilder();
-        int typeStart = typesJson.indexOf("\"type\":") + "\"type\":".length();
-        while (typeStart != -1) {
-            int typeEnd = typesJson.indexOf("}", typeStart);
-            String type = typesJson.substring(typeStart + 7, typeEnd - 1); // Obtener el tipo sin las comillas
-            if (types.length() > 0) {
-                types.append(", ");
-            }
-            types.append(type);
-            typeStart = typesJson.indexOf("\"type\":", typeEnd);
-        }
-        return types.toString();
     }
 }

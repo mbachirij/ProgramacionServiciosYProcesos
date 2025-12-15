@@ -1,30 +1,18 @@
 package ComunicacionRed.EjercicioHilosSockets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
+import java.io.Serializable;
 
-public class Hilo extends Thread{
-    private Socket socket;
+public class Persona implements Serializable {
+    private String nombre;
 
-    public Hilo(Socket socket){
-        this.socket = socket;
+    public Persona(String nombre){
+        this.nombre = nombre;
     }
 
-
-    @Override
-    public void run(){
-
-        try {
-
-            DataInputStream entrada = new DataInputStream(socket.getInputStream());
-            DataOutputStream salida = new DataOutputStream(socket.getOutputStream());
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
