@@ -22,6 +22,11 @@ public class Personaje {
         this.numEpisodios = numEpisodios;
         this.urlImagen = urlImagen;
     }
+
+    public void mostrar() {
+        System.out.println(this.toString());
+    }
+
     public int getId() { return id; }
     public String getGenero() { return genero; }
     public String getOrigen() { return origen; }
@@ -41,6 +46,7 @@ public class Personaje {
     public void setEspecie(String especie) { this.especie = especie; }
     public void setId(int id) { this.id = id; }
 
+    @Override
     public String toString(){
         String s = "";
         s+= "Id: "+id+"\n";
