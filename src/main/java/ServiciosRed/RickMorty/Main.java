@@ -1,11 +1,53 @@
 package ServiciosRed.RickMorty;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    private static final String ENCODING_TYPE = "UTF-8";
 
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("--- Rick & Morty API ---");
+
+        int opcion;
+
+        do {
+            System.out.println("1. Registrarse");
+            System.out.println("2. Iniciar Sesión");
+            System.out.println("3. Salir");
+            System.out.print("Opción: ");
+
+            opcion = sc.nextInt();
+
+            System.out.println();
+
+            switch (opcion) {
+                case 1:
+                    registrarUsuario();
+                    break;
+                case 2:
+                    if (validarUsuario()){
+                        menu();
+                    }
+                    break;
+                case 3:
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+            }
+
+        } while (opcion != 3);
+
+    }
+
+    public static void menu(){
         Scanner sc = new Scanner(System.in);
 
         ClienteRickMorty api = new ClienteRickMorty();
@@ -13,6 +55,8 @@ public class Main {
         String jsonActual = null;
 
         int opcion;
+
+
 
         do {
             System.out.println("\n--- MENÚ RICK & MORTY ---");
@@ -129,4 +173,65 @@ public class Main {
 
         sc.close();
     }
+
+    public static boolean registrarUsuario(){
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("--- REGISTRO DE USUARIO ---");
+        System.out.println("Introduce tu email: ");
+        String email = sc.nextLine();
+
+        System.out.println("Introduce contraseña: ");
+        String password = sc.nextLine();
+
+        try {
+
+            byte[] resumen = HashManager.getDigest(password.getBytes(ENCODING_TYPE));
+
+            Files.write(new File(email + ".credencial").toPath(), resumen);
+            System.out.println("¡¡ Usuario "+ email +" registrado !!");
+            return true;
+
+        } catch (NoSuchAlgorithmException | IOException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean validarUsuario(){
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("-- VALIDACIÓN DE USUARIO ---");
+        System.out.println("Introduce tu email: ");
+        String email = sc.nextLine();
+
+        System.out.println("Introduce contraseña: ");
+        String password = sc.nextLine();
+
+        try {
+
+            byte[] resumen = HashManager.getDigest(password.getBytes(ENCODING_TYPE));
+
+            byte[] resumenAlmacenado = Files.readAllBytes(new File(email + ".credencial").toPath());
+
+            if (HashManager.compararResumenes(resumen, resumenAlmacenado)) {
+                System.out.println("Usuario "+email+" Autorizado");
+                return true;
+            } else {
+                System.out.println("Error de validación");
+                return false;
+            }
+
+        } catch (NoSuchAlgorithmException | IOException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void mostrarResumenHexadecimal(byte[] resumen) {
+        String resumenHexadecimal =
+                String.format("%064x", new BigInteger(1, resumen));
+        System.out.println(resumenHexadecimal);
+    }
+
 }
